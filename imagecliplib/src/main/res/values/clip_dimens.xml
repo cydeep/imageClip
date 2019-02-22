@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="clip_scale_icon_size">33dp</dimen>
+    <dimen name="clip_scale_icon_left_margin">15dp</dimen>
+    <dimen name="clip_bottom_height">44dp</dimen>
+    <dimen name="clip_bottom_text_size">16dp</dimen>
+    <dimen name="gallery_divider_decoration_height">0.5dp</dimen>
+    <dimen name="gallery_bucket_margin">10dp</dimen>
+    <dimen name="gallery_margin">10dp</dimen>
+</resources>

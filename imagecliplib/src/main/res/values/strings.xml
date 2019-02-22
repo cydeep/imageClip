@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">imageClipLib</string>
+    <string name="clip_confirm">确认</string>
+    <string name="clip_cancel">取消</string>
+    <string name="clip_action_done">完成</string>
+    <string name="clip_reset">还原</string>
+
+</resources>
