@@ -23,3 +23,8 @@ dependencies {
      implementation 'com.github.cydeep:imageClip:v1.0.0'
      
 }  
+入口
+ImageClipActivity.startImageClipActivity(context,paht);
+
+返回：
+  String path = data.getStringExtra("path");
