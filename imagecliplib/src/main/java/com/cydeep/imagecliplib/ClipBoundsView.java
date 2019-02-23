@@ -37,21 +37,21 @@ public class ClipBoundsView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(ViewSizeUtil.getCustomDimen(360f),ViewSizeUtil.getCustomDimen(360f));
+        setMeasuredDimension(ViewSizeUtil.getCustomDimen(getContext(),360f),ViewSizeUtil.getCustomDimen(getContext(),360f));
     }
 
     private void init() {
-        dp_1 = ViewSizeUtil.getCustomDimen(1f);
+        dp_1 = ViewSizeUtil.getCustomDimen(getContext(),1f);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setFilterBitmap(true);
         mPaint.setAntiAlias(true);
         mPaint.setColor(0xffffffff);
-        float textSize = dp_1 / ViewSizeUtil.getDensity();
-        dp_124 = ViewSizeUtil.getCustomDimen(124f);
-        dp_240 = ViewSizeUtil.getCustomDimen(240f);
-        dp_250 = ViewSizeUtil.getCustomDimen(250f);
-        dp_360 = ViewSizeUtil.getCustomDimen(360f);
-        dp_119 = ViewSizeUtil.getCustomDimen(119f);
+        float textSize = dp_1 / ViewSizeUtil.getDensity(getContext());
+        dp_124 = ViewSizeUtil.getCustomDimen(getContext(),124f);
+        dp_240 = ViewSizeUtil.getCustomDimen(getContext(),240f);
+        dp_250 = ViewSizeUtil.getCustomDimen(getContext(),250f);
+        dp_360 = ViewSizeUtil.getCustomDimen(getContext(),360f);
+        dp_119 = ViewSizeUtil.getCustomDimen(getContext(),119f);
         mPaint.setTextSize(textSize);
     }
 

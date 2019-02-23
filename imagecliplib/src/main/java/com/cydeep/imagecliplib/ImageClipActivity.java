@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.cydeep.imagecliplib.utils.FileUtils;
 import com.cydeep.imagecliplib.utils.ImageUtil;
@@ -50,7 +51,7 @@ public class ImageClipActivity extends FragmentActivity {
         path = getIntent().getStringExtra("path");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_filter_clip);
-        findViewById(R.id.bottom).getLayoutParams().height = ViewSizeUtil.getCustomDimen(44f);
+        findViewById(R.id.bottom).getLayoutParams().height = ViewSizeUtil.getCustomDimen(this,44f);
         imageView = (ImageView) findViewById(R.id.clip_image_view);
         image_container = (RelativeLayout) findViewById(R.id.image_container);
         checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1, new CheckPermissionListener() {
@@ -62,7 +63,7 @@ public class ImageClipActivity extends FragmentActivity {
         });
 
         clip_bounds_view = findViewById(R.id.clip_bounds_view);
-        dp_360 = ViewSizeUtil.getCustomDimen(360f);
+        dp_360 = ViewSizeUtil.getCustomDimen(this,360f);
 
         findViewById(R.id.photo_full_view).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +98,7 @@ public class ImageClipActivity extends FragmentActivity {
         findViewById(R.id.comm_done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(ImageClipActivity.this,"保存中，请稍候！！",Toast.LENGTH_SHORT).show();
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
                 executorService.execute(new Runnable() {
                     @Override
@@ -105,7 +107,7 @@ public class ImageClipActivity extends FragmentActivity {
                             @Override
                             public void hasPermission() {
                                 final Bitmap bitmap = clip();
-                                path = ImageUtil.saveClip(bitmap, FileUtils.File_CLIP);
+                                path = ImageUtil.saveClip(ImageClipActivity.this,bitmap, FileUtils.File_CLIP);
                                 findViewById(R.id.comm_done).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -271,7 +273,10 @@ public class ImageClipActivity extends FragmentActivity {
                 if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     final Bitmap bitmap = clip();
-                    path = ImageUtil.saveClip(bitmap, FileUtils.File_CLIP);
+                    path = ImageUtil.saveClip(ImageClipActivity.this,bitmap, FileUtils.File_CLIP);
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
                     findViewById(R.id.comm_done).post(new Runnable() {
                         @Override
                         public void run() {
@@ -304,4 +309,11 @@ public class ImageClipActivity extends FragmentActivity {
         void hasPermission();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+    }
 }

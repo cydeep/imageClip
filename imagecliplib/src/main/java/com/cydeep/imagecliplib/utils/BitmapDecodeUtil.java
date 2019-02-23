@@ -6,9 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.TypedValue;
 
-import com.cydeep.imagecliplib.ImageClipApplication;
-import com.cydeep.imagecliplib.cache.MemoryCache;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,15 +43,16 @@ public class BitmapDecodeUtil {
         return options;
     }
 
-    public static Bitmap decodeBitmap(int resId) {
+    public static Bitmap decodeBitmap(Context context,int resId) {
         BitmapFactory.Options options = getBitmapOptions();
-        BitmapFactory.decodeResource(ImageClipApplication.getInstance().getResources(), resId, options);
+        BitmapFactory.decodeResource(context.getResources(), resId, options);
         getAfterBitmap(options);
         String key = getKey(String.valueOf(options.outWidth), String.valueOf(options.outHeight), "file://" + resId);
-        Bitmap bitmap = getMemoryCacheBitmap(key);
+        //        Bitmap bitmap = getMemoryCacheBitmap(key);
+        Bitmap bitmap = null;
         if (bitmap == null || bitmap.isRecycled()) {
-            bitmap = BitmapFactory.decodeResource(ImageClipApplication.getInstance().getResources(), resId, options);
-            putInMemoryCache(key, bitmap);
+            bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+//            putInMemoryCache(key, bitmap);
         }
         return bitmap;
     }
@@ -64,10 +62,11 @@ public class BitmapDecodeUtil {
         BitmapFactory.decodeFile(pathName, options);
         getAfterBitmap(options);
         String key = getKey(String.valueOf(options.outWidth), String.valueOf(options.outHeight), pathName);
-        Bitmap bitmap = getMemoryCacheBitmap(key);
+//        Bitmap bitmap = getMemoryCacheBitmap(key);
+        Bitmap bitmap = null;
         if (bitmap == null || bitmap.isRecycled()) {
             bitmap = BitmapFactory.decodeFile(pathName, options);
-            putInMemoryCache(key, bitmap);
+//            putInMemoryCache(key, bitmap);
         }
         return bitmap;
     }
@@ -76,16 +75,6 @@ public class BitmapDecodeUtil {
         return path + "_" + "width" + width + "_" + "height" + height;
     }
 
-    private static void putInMemoryCache(String key, Bitmap bitmap) {
-        if (bitmap != null) {
-            MemoryCache memoryCache = ImageClipApplication.getInstance().getMemoryCache();
-            memoryCache.put(key, bitmap);
-        }
-    }
-    private static Bitmap getMemoryCacheBitmap(String key) {
-        MemoryCache memoryCache = ImageClipApplication.getInstance().getMemoryCache();
-        return memoryCache.get(key);
-    }
 
     public static void getAfterBitmap(BitmapFactory.Options options) {
         float widthRate = options.outWidth * 1.0f / 2048 * 1.0f;
@@ -111,15 +100,15 @@ public class BitmapDecodeUtil {
         BitmapFactory.decodeStream(is, null, options);
         getAfterBitmap(options);
         Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
-        putInMemoryCache("is://" + bitmap.hashCode(), bitmap);
+//        putInMemoryCache("is://" + bitmap.hashCode(), bitmap);
         return bitmap;
     }
 
-    public static Bitmap compressBitmap(int resId, int maxWidth, int maxHeight) {
+    public static Bitmap compressBitmap(Context context,int resId, int maxWidth, int maxHeight) {
         final TypedValue value = new TypedValue();
         InputStream is = null;
         try {
-            is = ImageClipApplication.getInstance().getResources().openRawResource(resId, value);
+            is = context.getResources().openRawResource(resId, value);
             return compressBitmap(is, maxWidth, maxHeight);
         } catch (Exception e) {
             e.printStackTrace();

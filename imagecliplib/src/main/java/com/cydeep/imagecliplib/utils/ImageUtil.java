@@ -1,6 +1,7 @@
 package com.cydeep.imagecliplib.utils;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
@@ -12,8 +13,8 @@ import java.io.IOException;
 
 public class ImageUtil {
 
-    public static String saveClip(Bitmap photo, String path) {
-        String fileName = FileUtils.getSaveFile(path, FileUtils.PNG_FILE_SUFFIX);
+    public static String saveClip(Context context,Bitmap photo, String path) {
+        String fileName = FileUtils.getSaveFile(context,path, FileUtils.PNG_FILE_SUFFIX);
         try {
             BufferedOutputStream bos = new BufferedOutputStream(
                     new FileOutputStream(fileName, false));

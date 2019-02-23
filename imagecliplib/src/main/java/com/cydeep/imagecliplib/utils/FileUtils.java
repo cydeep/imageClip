@@ -8,8 +8,6 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 
-import com.cydeep.imagecliplib.ImageClipApplication;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,32 +55,32 @@ public class FileUtils {
         return file.exists();
     }
 
-    public static File getDestinationPath(String versionName) {
+    public static File getDestinationPath(Context context,String versionName) {
         File file;
-        file = setDestinationPath();
-        File result = new File(file, (ImageClipApplication.getInstance().getPackageName() + versionName + ".apk"));
+        file = setDestinationPath(context);
+        File result = new File(file, (context.getPackageName() + versionName + ".apk"));
         if (!result.exists()) {
-            result = new File(file, (ImageClipApplication.getInstance().getPackageName() + versionName + ".temp"));
+            result = new File(file, (context.getPackageName() + versionName + ".temp"));
         }
 
         return result;
     }
 
-    public static File getDestinationPath() {
-        return setDestinationPath();
+    public static File getDestinationPath(Context context) {
+        return setDestinationPath(context);
     }
 
 
-    private static File setDestinationPath() {
+    private static File setDestinationPath(Context context) {
         File file;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && Environment.getExternalStorageDirectory() != null) {
             file = new File(Environment.getExternalStorageDirectory(), APP_DIR);
         } else {
-            String path = getInnerSDCard(ImageClipApplication.getInstance());
-            if (getInnerSDCard(ImageClipApplication.getInstance()) != null) {
+            String path = getInnerSDCard(context);
+            if (getInnerSDCard(context) != null) {
                 file = new File(path, APP_DIR);
             } else {
-                file = ImageClipApplication.getInstance().getFilesDir();
+                file = context.getFilesDir();
             }
         }
         if (file != null && !file.exists()) {
@@ -92,10 +90,10 @@ public class FileUtils {
     }
 
 
-    public static boolean isFileDownloadComplete(String versionName) {
-        File file = getDestinationPath(versionName);
+    public static boolean isFileDownloadComplete(Context context,String versionName) {
+        File file = getDestinationPath(context,versionName);
         boolean result = false;
-        if (file.getName().equals(ImageClipApplication.getInstance().getPackageName() + versionName + ".apk")) {
+        if (file.getName().equals(context.getPackageName() + versionName + ".apk")) {
             result = true;
         }
         return result;
@@ -138,12 +136,12 @@ public class FileUtils {
         return 0;
     }
 
-    public static File getSourcePhotoFile() {
-        return createImageFile();
+    public static File getSourcePhotoFile(Context context) {
+        return createImageFile(context);
     }
 
-    public static String getCropPhotoFile() {
-        File file = new File(setDestinationPath(), File_IMG_DIR);
+    public static String getCropPhotoFile(Context context) {
+        File file = new File(setDestinationPath(context), File_IMG_DIR);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -151,8 +149,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getSaveFile(String dir, String suffix) {
-        File file = new File(setDestinationPath(), dir);
+    public static String getSaveFile(Context context,String dir, String suffix) {
+        File file = new File(setDestinationPath(context), dir);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -160,8 +158,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getSaveFile() {
-        File file = new File(setDestinationPath(), File_IMG_SAVE);
+    public static String getSaveFile(Context context) {
+        File file = new File(setDestinationPath(context), File_IMG_SAVE);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -169,8 +167,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getSaveFile(String name) {
-        File file = new File(setDestinationPath(), File_IMG_SAVE);
+    public static String getSaveFile(Context context,String name) {
+        File file = new File(setDestinationPath(context), File_IMG_SAVE);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -178,8 +176,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getSaveFilePath(String name, String suffix) {
-        File file = new File(setDestinationPath(), File_IMG_SAVE);
+    public static String getSaveFilePath(Context context,String name, String suffix) {
+        File file = new File(setDestinationPath(context), File_IMG_SAVE);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -187,8 +185,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getVideoFile() {
-        File file = new File(setDestinationPath(), File_VIDEO);
+    public static String getVideoFile(Context context) {
+        File file = new File(setDestinationPath(context), File_VIDEO);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -196,13 +194,13 @@ public class FileUtils {
         return path;
     }
 
-    public static String getDir(String path) {
-        File file = new File(setDestinationPath(), path);
+    public static String getDir(Context context,String path) {
+        File file = new File(setDestinationPath(context), path);
         return file.getAbsolutePath();
     }
 
-    public static String getAudioFile() {
-        File file = new File(setDestinationPath(), File_AUDIO);
+    public static String getAudioFile(Context context) {
+        File file = new File(setDestinationPath(context), File_AUDIO);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -214,8 +212,8 @@ public class FileUtils {
         return path + "_" + size;
     }
 
-    public static String getVideoImageFile() {
-        File file = new File(setDestinationPath(), File_IMG_DIR);
+    public static String getVideoImageFile(Context context) {
+        File file = new File(setDestinationPath(context), File_IMG_DIR);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -223,8 +221,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getVideoThumbnailFile(String url) {
-        File file = new File(setDestinationPath(), File_VIDEO);
+    public static String getVideoThumbnailFile(Context context,String url) {
+        File file = new File(setDestinationPath(context), File_VIDEO);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -232,8 +230,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getImageFile(String url) {
-        File file = new File(setDestinationPath(), File_IMG_DIR);
+    public static String getImageFile(Context context,String url) {
+        File file = new File(setDestinationPath(context), File_IMG_DIR);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -241,8 +239,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getGifFile(String url) {
-        File file = new File(setDestinationPath(), File_IMG_SAVE);
+    public static String getGifFile(Context context,String url) {
+        File file = new File(setDestinationPath(context), File_IMG_SAVE);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -253,8 +251,8 @@ public class FileUtils {
         return path;
     }
 
-    public static String getMp4VideoImageFile(String url) {
-        File file = new File(setDestinationPath(), File_VIDEO);
+    public static String getMp4VideoImageFile(Context context,String url) {
+        File file = new File(setDestinationPath(context), File_VIDEO);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -262,11 +260,11 @@ public class FileUtils {
         return path;
     }
 
-    public static String saveFile(File sourcePath) throws FileNotFoundException {
+    public static String saveFile(Context context,File sourcePath) throws FileNotFoundException {
         if (!sourcePath.exists()) {
             throw new FileNotFoundException("file can not found");
         }
-        String saveFile = FileUtils.getSaveFile();
+        String saveFile = FileUtils.getSaveFile(context);
         FileInputStream fileInputStream = new FileInputStream(sourcePath);
         FileOutputStream fileOutputStream = new FileOutputStream(saveFile);
         byte[] bytes = new byte[4096];
@@ -290,11 +288,11 @@ public class FileUtils {
     }
 
 
-    public static File getCopyFile(File sourcePath) throws FileNotFoundException {
+    public static File getCopyFile(Context context,File sourcePath) throws FileNotFoundException {
         if (!sourcePath.exists()) {
             throw new FileNotFoundException("file can not found");
         }
-        String saveFile = FileUtils.getGifFile(sourcePath.getAbsolutePath());
+        String saveFile = FileUtils.getGifFile(context,sourcePath.getAbsolutePath());
         FileInputStream fileInputStream = new FileInputStream(sourcePath);
         FileOutputStream fileOutputStream = new FileOutputStream(saveFile);
         byte[] bytes = new byte[4096];
@@ -318,11 +316,11 @@ public class FileUtils {
     }
 
 
-    private static File createImageFile() {
+    private static File createImageFile(Context context) {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbumDir();
+        File albumF = getAlbumDir(context);
         File imageF = null;
         try {
             imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
@@ -332,12 +330,12 @@ public class FileUtils {
         return imageF;
     }
 
-    public static File getAlbumDir() {
+    public static File getAlbumDir(Context context) {
         File storageDir;
 
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 
-            storageDir = getAlbumStorageDir(File_IMG_DIR);
+            storageDir = getAlbumStorageDir(context,File_IMG_DIR);
 
             if (storageDir != null) {
                 if (!storageDir.mkdirs()) {
@@ -349,18 +347,18 @@ public class FileUtils {
             }
 
         } else {
-            String path = getInnerSDCard(ImageClipApplication.getInstance());
-            if (getInnerSDCard(ImageClipApplication.getInstance()) != null) {
+            String path = getInnerSDCard(context);
+            if (getInnerSDCard(context) != null) {
                 storageDir = new File(path, File_IMG_DIR);
             } else {
-                storageDir = ImageClipApplication.getInstance().getFilesDir();
+                storageDir = context.getFilesDir();
             }
         }
         return storageDir;
     }
 
-    public static File getAlbumStorageDir(String albumName) {
-        return new File(setDestinationPath(), albumName);
+    public static File getAlbumStorageDir(Context context,String albumName) {
+        return new File(setDestinationPath(context), albumName);
     }
 
 
@@ -411,8 +409,8 @@ public class FileUtils {
     }
 
 
-    public static String getFormatSize(long length) {
-        String result = Formatter.formatFileSize(ImageClipApplication.getInstance(), length);
+    public static String getFormatSize(Context context,long length) {
+        String result = Formatter.formatFileSize(context, length);
         if (result.contains(".00")) {
             result = result.replace(".00", "");
         } else if (result.endsWith("KB") && result.indexOf(".") != -1 && result.indexOf(" KB") - result.indexOf(".") > 1) {

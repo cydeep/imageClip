@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.cydeep.imagecliplib.ImageClipApplication;
-
 /**
  * Created by chenyu on 15/10/18.
  */
@@ -37,8 +35,8 @@ public class ViewSizeUtil {
         return rect;
     }
 
-    public static Point getScreenSize() {
-        WindowManager wmManager = (WindowManager) ImageClipApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+    public static Point getScreenSize(Context context) {
+        WindowManager wmManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wmManager.getDefaultDisplay();
         DisplayMetrics metric = new DisplayMetrics();
         display.getMetrics(metric);
@@ -52,22 +50,22 @@ public class ViewSizeUtil {
      * @param dimen dp值
      * @return
      */
-    public static int getCustomDimen(float dimen){
-        float density = ViewSizeUtil.getScreenSize().x / ViewSizeUtil.getDensity();
-        int result = (int) (ViewSizeUtil.getDensity() * density * dimen / 360f);
+    public static int getCustomDimen(Context context,float dimen){
+        float density = ViewSizeUtil.getScreenSize(context).x / ViewSizeUtil.getDensity(context);
+        int result = (int) (ViewSizeUtil.getDensity(context) * density * dimen / 360f);
         return result;
     }
 
-    public static float getDensity() {
-        WindowManager wmManager = (WindowManager) ImageClipApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+    public static float getDensity(Context context) {
+        WindowManager wmManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wmManager.getDefaultDisplay();
         DisplayMetrics metric = new DisplayMetrics();
         display.getMetrics(metric);
         return metric.density;
     }
 
-    public static int getDensityDpi() {
-        WindowManager wmManager = (WindowManager) ImageClipApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+    public static int getDensityDpi(Context context) {
+        WindowManager wmManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wmManager.getDefaultDisplay();
         DisplayMetrics metric = new DisplayMetrics();
         display.getMetrics(metric);
