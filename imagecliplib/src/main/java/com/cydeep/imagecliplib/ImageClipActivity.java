@@ -38,9 +38,9 @@ public class ImageClipActivity extends FragmentActivity {
     private String path;
 
 
-    public static void startImageClipActivity(Activity activity, int requestCode,String path) {
+    public static void startImageClipActivity(Activity activity, int requestCode, String path) {
         Intent intent = new Intent(activity, ImageClipActivity.class);
-        intent.putExtra("path",path);
+        intent.putExtra("path", path);
         activity.startActivityForResult(intent, requestCode);
     }
 
@@ -52,7 +52,7 @@ public class ImageClipActivity extends FragmentActivity {
         setContentView(R.layout.activity_image_filter_clip);
         findViewById(R.id.bottom).getLayoutParams().height = ViewSizeUtil.getCustomDimen(44f);
         imageView = (ImageView) findViewById(R.id.clip_image_view);
-        mAttacher = new PhotoViewAttacher(imageView);
+        image_container = (RelativeLayout) findViewById(R.id.image_container);
         checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1, new CheckPermissionListener() {
             @Override
             public void hasPermission() {
@@ -61,19 +61,8 @@ public class ImageClipActivity extends FragmentActivity {
             }
         });
 
-        mAttacher.setMediumScale(2.0f);
-        mAttacher.setMaximumScale(3.0f);
-        image_container = (RelativeLayout) findViewById(R.id.image_container);
         clip_bounds_view = findViewById(R.id.clip_bounds_view);
         dp_360 = ViewSizeUtil.getCustomDimen(360f);
-        image_container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int deltHeight = setCustomBounds();
-                setMask(deltHeight);
-                image_container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
 
         findViewById(R.id.photo_full_view).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +83,7 @@ public class ImageClipActivity extends FragmentActivity {
                 }
             }
         });
-        findViewById(R.id.comm_reset).setOnClickListener( new View.OnClickListener() {
+        findViewById(R.id.comm_reset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                mAttacher.update();
@@ -121,14 +110,13 @@ public class ImageClipActivity extends FragmentActivity {
                                     @Override
                                     public void run() {
                                         Intent intent = new Intent();
-                                        intent.putExtra("path",path);
+                                        intent.putExtra("path", path);
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     }
                                 });
                             }
                         });
-
 
 
                     }
@@ -147,6 +135,15 @@ public class ImageClipActivity extends FragmentActivity {
     private void initImageView() {
         imageView.setImageBitmap(bitmap);
         imageView.setTag(true);
+        mAttacher = new PhotoViewAttacher(imageView);
+        image_container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int deltHeight = setCustomBounds();
+                setMask(deltHeight);
+                image_container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
         mAttacher.setOnMatrixChangeListener(new PhotoViewAttacher.OnMatrixChangedListener() {
 
             @Override
@@ -189,15 +186,19 @@ public class ImageClipActivity extends FragmentActivity {
                         }
                     }
                 }
+
             }
+
         });
+        mAttacher.setMediumScale(2.0f);
+        mAttacher.setMaximumScale(3.0f);
     }
 
     private void setMask(int deltHeight) {
         View bottom = findViewById(R.id.clip_bounds_view_below);
-        bottom.setBackgroundResource(R.color.black_overlay);
+        bottom.setBackgroundResource(R.color.clip_black_overlay);
         View above = findViewById(R.id.clip_bounds_view_above);
-        above.setBackgroundResource(R.color.black_overlay);
+        above.setBackgroundResource(R.color.clip_black_overlay);
         above.getLayoutParams().height = bottom.getLayoutParams().height = deltHeight;
     }
 
@@ -226,7 +227,7 @@ public class ImageClipActivity extends FragmentActivity {
         final float cropY = (-transY + mClipBorderRectF.top) / scale;
         final float cropWidth = mClipBorderRectF.width() / scale;
         final float cropHeight = mClipBorderRectF.height() / scale;
-        return  Bitmap.createBitmap(bitmap, (int) cropX, (int) cropY, (int) cropWidth, (int) cropHeight, null, false);
+        return Bitmap.createBitmap(bitmap, (int) cropX, (int) cropY, (int) cropWidth, (int) cropHeight, null, false);
     }
 
     private RectF getClipBorder() {
@@ -275,7 +276,7 @@ public class ImageClipActivity extends FragmentActivity {
                         @Override
                         public void run() {
                             Intent intent = new Intent();
-                            intent.putExtra("path",path);
+                            intent.putExtra("path", path);
                             setResult(RESULT_OK, intent);
                             finish();
                         }

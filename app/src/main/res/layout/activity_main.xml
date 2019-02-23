@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
         android:id="@+id/clip_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
