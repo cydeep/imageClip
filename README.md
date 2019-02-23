@@ -24,7 +24,7 @@ dependencies {
      
 }  
 入口
-ImageClipActivity.startImageClipActivity(context,paht);
+ImageClipActivity.startImageClipActivity(context,path);
 
 返回：
   String path = data.getStringExtra("path");
